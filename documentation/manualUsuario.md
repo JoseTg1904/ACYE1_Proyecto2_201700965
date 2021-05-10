@@ -92,8 +92,10 @@ A continuación se describen los comandos que la aplicación puede reconocer.
 - **salir**
     <br />Con este comando podra salirse de la ejecucion del programa<br />
 <br />
----
-Nota
-1. Para los comandos que necesitan calculos estadisticos es necesario cargar un archivo de entrada previamente. 
-2. Los comandos que por alguna razon tuvieran un problema en su ejecucion mostraran la consola de salida en rojo con un mensaje denotando que sucedio en su ejecucion, si todo se ejecuta correctamente se mostrara en verde.
----
+```
+Nota:
+
+    1. Para los comandos que necesitan calculos estadisticos es necesario cargar un archivo de entrada previamente.
+
+    2. Los comandos que por alguna razon tuvieran un problema en su ejecucion mostraran la consola de salida en rojo con un mensaje denotando que sucedio en su ejecucion, si todo se ejecutara correctamente la consola se mostrara en verde.
+```
