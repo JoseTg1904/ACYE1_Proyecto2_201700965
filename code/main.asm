@@ -14,7 +14,7 @@ include reporte.asm ;macros para la creacion del reporte
     info3 db "Primer semestre 2021$"
     info4 db "Jose Carlos I Alonzo Colocho$"
     info5 db "201700965$"
-    info6 db "Proyecto 2 assembler", "$"
+    info6 db "Proyecto 2 assembler$"
 
     ;mensajes comando
     ingrese db "Ingrese un comando: $"
@@ -36,7 +36,7 @@ include reporte.asm ;macros para la creacion del reporte
     stringAuxiliar db "$", "$"
 
     ;archivo
-    pathEntrada db 50 dup(00h), "$"
+    pathEntrada db 50 dup(00h), 00h
     extension db ".xml$"
     verificadorExtension db 4 dup("$"), "$"
     errorArchivo db 0
@@ -71,6 +71,7 @@ include reporte.asm ;macros para la creacion del reporte
     tamanioTabla dw 0
     posicionAux dw 0
     banderaNuevo db 0
+    modaValor dw 0
     modaMensaje db "Numero: $"
     noVeces db "No. veces: $"
 
@@ -95,7 +96,6 @@ include reporte.asm ;macros para la creacion del reporte
     ancho dw 0 ;ancho de la barra
     inicioBarra dw 0 ;posicion inicial de la barra
     finBarra dw 0 ;posicion final de la barra
-    espacioBarra dw 0 ;espacio entre barras
     altoBarra dw 0 ;altura de la barra
     inicioNumero dw 0 ;posicion del numero perteneciente a la barra
     pasoNumero dw 0 ;espacio entre numeros
@@ -143,7 +143,7 @@ include reporte.asm ;macros para la creacion del reporte
 
         analizarComando proc
             toLowerCase bufferTeclado
-            call obtenerTamanio ;retorna el tamanio del comando ingresado
+            call obtenerTamanio ;retorna el tamaño del comando ingresado
 
             compararCadenas salirComando, bufferTeclado, tamanioComando
             jz salirEtiqueta
@@ -204,12 +204,6 @@ include reporte.asm ;macros para la creacion del reporte
                 imprimir salto, 0d
                 imprimir salto, 0d
 
-                jmp finAnalizar
-
-            sobrepasoCantidadNumeros:
-                jmp finAnalizar
-
-            sobrepasoFi:
                 jmp finAnalizar
 
             ghistEtiqueta:
@@ -288,9 +282,6 @@ include reporte.asm ;macros para la creacion del reporte
                 Print16 varAux
                 imprimir punto, 7d
                 Print16 numeroAux
-                ;mov ax, numeroAux
-                ;conversionAString bufferVideo
-                ;imprimir bufferVideo, 7d
                 imprimir salto, 0d
                 imprimir salto, 0d
 
@@ -300,15 +291,13 @@ include reporte.asm ;macros para la creacion del reporte
                 cmp banderaCargado, 0d
                 jz noCargadoEtiqueta
 
-                obtenerModa
-
                 imprimir salto, 0d
                 imprimir salidaConsola, 10d
                 imprimir modaMensaje, 7d
-                Print16 numeroAux ;moda
+                Print16 modaValor ;moda
                 imprimir espacio, 0d
                 imprimir noVeces, 7d
-                Print16 varAux ;numeroVeces
+                Print16 maximo ;numeroVeces
                 imprimir salto, 0d
                 imprimir salto, 0d
 
@@ -363,7 +352,6 @@ include reporte.asm ;macros para la creacion del reporte
                 analizadorLexico bufferArchivo
 
                 obtenerTablaDeFrecuencias
-
                 obtenerFrecuenciaMaxima
 
                 imprimir salto, 0d
@@ -408,7 +396,7 @@ include reporte.asm ;macros para la creacion del reporte
             ret
         limpiarTerminal endp
 
-        obtenerPath proc
+        obtenerPath proc ;devuelve el path adjunto al comando "abrir_"
             xor bx, bx
             xor si, si
             mov bx, 6d
@@ -426,7 +414,7 @@ include reporte.asm ;macros para la creacion del reporte
                 ret
         obtenerPath endp
 
-        obtenerTamanio proc
+        obtenerTamanio proc ;devuelve el tamanio de la entrada de la consola
             xor bx, bx
             mov tamanioComando, 0d
 

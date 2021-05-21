@@ -5,8 +5,7 @@ analizadorLexico macro buffer
     limpiarArreglo arregloAuxiliar
 
     xor si, si
-    mov numeroAux, 0
-    mov posicionArreglo, 0
+    mov posicionArreglo, 0d
     mov si, -1
 
     estado0:
@@ -14,26 +13,30 @@ analizadorLexico macro buffer
 
         cmp bl, "$"
         jz fin
-        
+
         cmp bl, "<"
         jz auxiliar
-        
+
         cmp bl, ">"
         jz estado0 
 
         jmp estado0
+
     auxiliar:
         limpiarBuffer bufferAcumulador, "$"
         xor di, di
+
     estado1:
         obtenerCaracter buffer
-        
+
         cmp bl, ">"
         jz estado2
 
         mov bufferAcumulador[di], bl
         inc di
+
         jmp estado1
+
     estado2:
         mov respaldoSI, si
         
@@ -54,36 +57,36 @@ analizadorLexico macro buffer
         mov ax, lengthof numeroInicio - 1
         compararCadenas numeroInicio, bufferAcumulador, ax
         je intermedio
+
     restaurar:
-        xor si, si
         mov si, respaldoSI
         dec si
         jmp estado0
+
     intermedio:
         limpiarBuffer bufferAcumulador, "$"
-        xor si, si
         mov si, respaldoSI
         xor di, di
+
     obtenerNumero:
         obtenerCaracter buffer
-        
+
         cmp bl, "<"
         jz conversion
 
         mov bufferAcumulador[di], bl
         inc di
         jmp obtenerNumero
+
     conversion:
         mov respaldoSI, si
 
         convertirANum bufferAcumulador
-        xor cx, cx
         mov cx, numeroAux
 
-        xor si, si
         mov si, posicionArreglo
 
-        shl si, 1d ; esto es = x2 por que el arreglo es dw y cada indice siempre es x2
+        shl si, 1d
         mov arregloOriginal[si], cx
         mov arregloAuxiliar[si], cx
 
@@ -92,6 +95,7 @@ analizadorLexico macro buffer
         mov si, respaldoSI
         dec si
         jmp estado0
+
     fin:
 endm
 
@@ -132,8 +136,9 @@ convertirANum macro buffer
         mul dx
         add ax, cx
         mov numeroAux, ax
-        
+
         jmp fin
+
     centena:
         mov dx, 100d ;centena
         mov ax, numeroAux
@@ -164,5 +169,6 @@ convertirANum macro buffer
         mov ax, numeroAux
         add ax, cx
         mov numeroAux, ax
+
     fin:
 endm

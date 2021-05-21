@@ -55,18 +55,18 @@ toLowerCase	macro string
 	mov cx, lengthof string
 
 	iterar:
-		cmp string[si], 36
+		cmp string[si], 36d ; if caracter == "$"
 		je fin				
-		cmp string[si], 65
+		cmp string[si], 65d ; if caracter < A (en su respectivo ascii)
 		jb siguiente
-		cmp string[si], 90
+		cmp string[si], 90d ; if caracter > Z (en su respectivo ascii)
 		ja siguiente
 
-		add string[si], 32
+		add string[si], 32d ;si el caracter esta entre A-Z, sumar 32 para obtener el ascii de minuscula
 		inc si
 
 		loop iterar
-	
+
     jmp fin
 
 	siguiente:
@@ -92,56 +92,18 @@ limpiarArreglo macro arreglo
     local limpiarAr
 
     mov cx, lengthof arreglo
-    xor bx, bx
-    mov iteradorI, 0
+    mov iteradorI, 0d
 
     limpiarAr:
         mov bx, iteradorI
-        shl bx, 1 ; esto es igual que multiplicar el registro por 2
+        shl bx, 1d ; Esto es igual que multiplicar el registro por 2
         mov arreglo[bx], -1
         inc iteradorI
         cmp cx, iteradorI
         jnz limpiarAr
 endm
 
-imprimirArreglo macro arreglo
-    local ciclo
-
-    xor si, si
-    mov iteradorI, 0d
-
-    ciclo:
-        mov si, iteradorI
-        shl si, 1d
-
-        mov ax, arreglo[si]
-        mov varAux, ax
-        Print16 varAux
-        leerHastaEnter bufferTeclado
-
-        inc iteradorI
-        mov ax, tamanioTabla
-        cmp iteradorI, ax
-        jnz ciclo
-endm
-
-copiarArreglo macro origen, destino
-    local ciclo
-
-    mov cx, lengthof origen
-    xor bx, bx
-    mov iteradorI, 0
-
-    ciclo:
-        mov bx, iteradorI
-        shl bx, 1d
-        mov ax, origen[bx]
-        mov destino[bx], ax
-        inc iteradorI
-        cmp cx, iteradorI
-        jnz ciclo
-endm
-
+; El valor a convertir tiene que estar el registro ax
 conversionAString macro convertido
     local split, split2, negativo, fin, fin2
 
@@ -192,7 +154,7 @@ conversionAString macro convertido
         pop si
 endm
 
-;division que genera cuatro decimales
+;division que genera tres decimales
 dividir16 macro numerador, denominador
     local ciclo
 
@@ -257,27 +219,6 @@ Print16 macro Regis, color
         jnz noz
 endm
 
-Print8 macro Regis, color
-    local zero, noz
-    
-    mov bx, 2
-    xor ax, ax
-    mov ax, Regis
-    mov cx, 10
-    zero:
-        xor dx, dx
-        div cx;NUMERO / 10
-        push dx
-        dec bx
-        jnz zero
-        xor bx, 2
-    noz:
-        pop dx
-        PrintN dl, color
-        dec bx
-        jnz noz
-endm
-
 PrintN macro Num, color
     push bx
     push cx
@@ -290,10 +231,32 @@ PrintN macro Num, color
     pop bx
 endm
 
-closeFile macro handler
-    mov ax, @data
-    mov ds, ax
-    mov ah, 3eh
-    mov bx, handler
-    int 21h
+modificarBuffer macro buffer
+    local uno, dos, fin
+
+    push ax
+    mov al, buffer[0]
+
+    cmp buffer[1], "$"
+    jz uno
+
+    cmp buffer[2], "$"
+    jz dos
+
+    jmp fin
+
+    uno:
+        mov buffer[0], "0"
+        mov buffer[1], "0"
+        mov buffer[2], al
+        jmp fin
+
+    dos:
+        mov ah, buffer[1]
+        mov buffer[0], "0"
+        mov buffer[1], al
+        mov buffer[2], ah
+
+    fin:
+        pop ax
 endm

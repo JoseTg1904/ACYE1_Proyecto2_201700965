@@ -1,3 +1,15 @@
+createFile macro buffer
+    mov ax, @data
+    mov ds, ax
+    mov ah, 3ch
+    mov cx, 00h
+    lea dx, buffer
+    int 21h
+    mov bx, ax
+    mov ah, 3eh
+    int 21h
+endm
+
 abrirArchivo macro buffer, handler
     local error, fin, busquedaInicioExtension, obtenerExtension, verificarExtension, invalida
 
@@ -55,6 +67,22 @@ abrirArchivo macro buffer, handler
     fin:
 endm
 
+abrirArchivoSinValidacion macro buffer, handler
+    local error, fin
+
+    mov ah, 3dh
+    mov al, 10b ;Abriendo el archivo en lectura/escritura
+    lea dx, buffer
+    int 21h
+    mov handler, ax
+    jc error ;mover hacia la etiqueta si se diera un error en la apertura
+    jmp fin
+
+    error:
+        ;mostrar error en la apertura
+    fin:
+endm
+
 leerArchivo macro handler, numBytes, buffer
     local error, fin
 
@@ -75,4 +103,22 @@ leerArchivo macro handler, numBytes, buffer
         imprimir salto, 0d
         mov errorArchivo, 1
     fin:
+endm
+
+writeFile macro handler, buffer, numbytes
+    mov ax, @data
+    mov ds, ax
+    mov ah, 40h
+    mov bx, handler
+    mov cx, numbytes
+    lea dx, buffer
+    int 21h
+endm
+
+closeFile macro handler
+    mov ax, @data
+    mov ds, ax
+    mov ah, 3eh
+    mov bx, handler
+    int 21h
 endm

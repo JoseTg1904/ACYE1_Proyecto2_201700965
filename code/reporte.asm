@@ -18,22 +18,18 @@ crearReporte macro
     writeFile handle, fecha, sizeof fecha - 1
 
     ;interrupcion para obtener fecha actual
-    xor ax, ax
     mov ah, 2ah
     int 21h
-
     mov dia, dl
     mov mes, dh
     mov anio, cx
 
-    xor ax, ax
     mov al, dia
     conversionAString bufferVideo
     modificarBuffer bufferVideo
     writeFile handle, bufferVideo[1], 1d
     writeFile handle, bufferVideo[2], 1d
     writeFile handle, diagonal, sizeof diagonal - 1
-    xor ax, ax
     mov al, mes
     conversionAString bufferVideo
     modificarBuffer bufferVideo
@@ -48,19 +44,16 @@ crearReporte macro
     ;interrupcion para obtener hora actual
     mov ah, 2ch
     int 21h             
-        
     mov horas, ch
     mov minutos, cl
 
     writeFile handle, hora, sizeof hora - 1
-    xor ax, ax
     mov al, horas
     conversionAString bufferVideo
     modificarBuffer bufferVideo
     writeFile handle, bufferVideo[1], 1d
     writeFile handle, bufferVideo[2], 1d
     writeFile handle, dosPuntos, sizeof dosPuntos - 1
-    xor ax, ax
     mov al, minutos
     conversionAString bufferVideo
     modificarBuffer bufferVideo
@@ -102,8 +95,7 @@ crearReporte macro
 
     ;moda
     writeFile handle, moda, sizeof moda - 1
-    obtenerModa
-    mov ax, numeroAux
+    mov ax, modaValor
     conversionAString bufferVideo
     modificarBuffer bufferVideo
     writeFile handle, bufferVideo, sizeof bufferVideo - 1
@@ -208,7 +200,7 @@ escribirSeparador macro
     local ciclo, ciclo2
 
     writeFile handle, mas, sizeof mas - 1
-    
+
     mov iteradorI, 0d
     ciclo:
         writeFile handle, tope, sizeof tope - 1
@@ -226,42 +218,4 @@ escribirSeparador macro
         jnz ciclo2
 
     writeFile handle, mas, sizeof mas - 1
-endm
-
-abrirArchivoSinValidacion macro buffer, handler
-    local error, fin
-
-    mov ah, 3dh
-    mov al, 10b ;Abriendo el archivo en lectura/escritura
-    lea dx, buffer
-    int 21h
-    mov handler, ax
-    jc error ;mover hacia la etiqueta si se diera un error en la apertura
-    jmp fin
-
-    error:
-        ;mostrar error en la apertura
-    fin:
-endm
-
-createFile macro buffer
-    mov ax, @data
-    mov ds, ax
-    mov ah, 3ch
-    mov cx, 00h
-    lea dx, buffer
-    int 21h
-    mov bx, ax
-    mov ah, 3eh
-    int 21h
-endm
-
-writeFile macro handler, buffer, numbytes
-    mov ax, @data
-    mov ds, ax
-    mov ah, 40h
-    mov bx, handler
-    mov cx, numbytes
-    lea dx, buffer
-    int 21h
 endm

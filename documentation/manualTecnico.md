@@ -48,3 +48,11 @@ Contiene la documentacion en formato *markdown* del manual tecnico y de usuario.
 ## Uso
 
 Escribir el nombre del ejecutable *"main"* en la consola de DOSbox.
+
+## Consideraciones
+
+1. El maximo de numeros distintos que soporta el programa son 100 para los analisis estadisticos y 76 para los graficos.
+
+2. El maximo de numeros en el archivo de entrada pueden ser de hasta 1000 numeros.
+
+3. La frecuencia admitida para un numero varia entre (4 - 655) para poder visualizar de manera corecta los graficos.
