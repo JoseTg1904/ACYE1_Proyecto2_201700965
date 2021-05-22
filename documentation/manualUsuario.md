@@ -98,4 +98,10 @@ Nota:
     1. Para los comandos que necesitan calculos estadisticos es necesario cargar un archivo de entrada previamente.
 
     2. Los comandos que por alguna razon tuvieran un problema en su ejecucion mostraran la consola de salida en rojo con un mensaje denotando que sucedio en su ejecucion, si todo se ejecutara correctamente la consola se mostrara en verde.
+    
+    3. El maximo de numeros distintos que soporta el programa son 100 para los analisis estadisticos y 76 para los graficos.
+
+    4. El maximo de numeros en el archivo de entrada pueden ser de hasta 1000 numeros.
+
+    5. La frecuencia admitida para un numero varia entre (4 - 655) para poder visualizar de manera corecta los graficos.
 ```
