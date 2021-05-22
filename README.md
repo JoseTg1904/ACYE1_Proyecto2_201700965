@@ -3,4 +3,4 @@
 El codigo del proyecto junto a su ejecutable y un archivo de entrada se encuentran en la carpeta
 "code".
 
-La documentacion tanto de usuario como tecnica se encuentra en la carpeta "documentation".
+La documentacion tanto de usuario como tecnica se encuentra en la carpeta "documentation" junto con el enunciado original del proyecto.
