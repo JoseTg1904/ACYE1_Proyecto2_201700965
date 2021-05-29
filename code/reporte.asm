@@ -24,12 +24,14 @@ crearReporte macro
     mov mes, dh
     mov anio, cx
 
+    xor ah, ah ;limpieza de la parte alta del registro para evitar que sobrepase el rango de conversion del macro
     mov al, dia
     conversionAString bufferVideo
     modificarBuffer bufferVideo
     writeFile handle, bufferVideo[1], 1d
     writeFile handle, bufferVideo[2], 1d
     writeFile handle, diagonal, sizeof diagonal - 1
+    xor ah, ah
     mov al, mes
     conversionAString bufferVideo
     modificarBuffer bufferVideo
@@ -48,12 +50,14 @@ crearReporte macro
     mov minutos, cl
 
     writeFile handle, hora, sizeof hora - 1
+    xor ah, ah
     mov al, horas
     conversionAString bufferVideo
     modificarBuffer bufferVideo
     writeFile handle, bufferVideo[1], 1d
     writeFile handle, bufferVideo[2], 1d
     writeFile handle, dosPuntos, sizeof dosPuntos - 1
+    xor ah, ah
     mov al, minutos
     conversionAString bufferVideo
     modificarBuffer bufferVideo
